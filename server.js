@@ -12,23 +12,18 @@ const passportJWT = require("passport-jwt");
 
 const HTTP_PORT = process.env.PORT || 8080;
 
-app.use(express.json());
-app.use(cors());
-
-// add passport as application-level middleware
-app.use(passport.initialize());
-
 //JSON Web Token setup 
-let ExtractJWT = passportJWT.ExtractJwt;
+let ExtractJwt = passportJWT.ExtractJwt;
 let JwtStrategy = passportJWT.Strategy;
 
 //configure it's options 
 let jwtOptions = {
-    jwtFromRequest : ExtractJWT.fromAuthHeaderWithScheme('jwt'),
+    jwtFromRequest : ExtractJwt.fromAuthHeaderWithScheme('jwt'),
     secretOrKey : process.env.JWT_SECRET,
 };
 
-jwtOptions.secretOrKey = process.env.JWT_SECRET;
+console.log('jwtOptions:', jwtOptions);
+console.log('process.env.JWT_SECRET:', process.env.JWT_SECRET);
 
 //jwt strategy middleware function checks if there is a valid jwt_payload and if so invoke the next() method
 let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next){
@@ -53,6 +48,8 @@ passport.use(strategy);
 //add passport as application-level middleware
 app.use(passport.initialize());
 
+app.use(cors());
+app.use(express.json());
 
 app.post("/api/user/register", (req, res) => {
     userService.registerUser(req.body)
