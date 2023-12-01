@@ -19,14 +19,16 @@ app.use(cors());
 app.use(passport.initialize());
 
 //JSON Web Token setup 
-let passportJWT = passportJWT.ExtractJwt;
+let ExtractJWT = passportJWT.ExtractJwt;
 let JwtStrategy = passportJWT.Strategy;
 
 //configure it's options 
 let jwtOptions = {
-    jwtFromRequest : ExtractJwt.fromAuthHeaderWithScheme('jwt'),
+    jwtFromRequest : ExtractJWT.fromAuthHeaderWithScheme('jwt'),
     secretOrKey : process.env.JWT_SECRET,
 };
+
+jwtOptions.secretOrKey = process.env.JWT_SECRET;
 
 //jwt strategy middleware function checks if there is a valid jwt_payload and if so invoke the next() method
 let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next){
@@ -43,7 +45,7 @@ let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next){
     } else { //f the jwt_payload is invalid, the next() method will be called without the payload data
         next(null, false); // which will cause our server to return a 401 (Unauthorized) error
     }
-})
+});
 
 //tell passport to use our strategy
 passport.use(strategy);
