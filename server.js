@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -18,7 +18,7 @@ let JwtStrategy = passportJWT.Strategy;
 
 //configure it's options 
 let jwtOptions = {
-    jwtFromRequest : ExtractJwt.fromAuthHeaderWithScheme('jwt'),
+    jwtFromRequest : ExtractJwt.fromAuthHeaderWithScheme('JWT'),
     secretOrKey : process.env.JWT_SECRET,
 };
 
