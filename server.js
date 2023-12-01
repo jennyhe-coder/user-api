@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 const userService = require("./user-service.js");
+
 //this module is used primarily to "sign" our JSON payload with a 'secret' and generate the token 
 const jwt = require('jsonwebtoken');
 const passport = require("passport");
@@ -24,7 +25,7 @@ let JwtStrategy = passportJWT.Strategy;
 //configure it's options 
 let jwtOptions = {
     jwtFromRequest : ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-    secretOrKey : process.env.secretOrKey,
+    secretOrKey : process.env.JWT_SECRET,
 };
 
 //jwt strategy middleware function checks if there is a valid jwt_payload and if so invoke the next() method
@@ -69,7 +70,7 @@ app.post("/api/user/login", (req, res) => {
             userName : user.userName
         };
 
-        //Sign the payload with the secret from process.env.JWT_SECRET
+        //Sign the payload with the secret from 
         let token = jwt.sign(payload, jwtOptions.secretOrKey);
 
         res.json({ "message": "login successful", token : token});
